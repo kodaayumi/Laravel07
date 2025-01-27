@@ -31,5 +31,8 @@ services:
       - net1
     ports:
       - 3306:3306
+    volumes:
+  mysql_data:
+    driver: local
 networks:
   net1:
