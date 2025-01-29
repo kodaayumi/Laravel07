@@ -1,5 +1,22 @@
-<h1>一覧画面</h1>
-<button onclick="location.href='{{ route('show.create') }}'">新規登録画面へ</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+
+<body>
+@include('layouts.header')
+    <section class="max-w-5xl mx-auto">
+    <div class="flex">
+        <img src="" alt="">
+        <div class="text-center">
+            <p>ユーザー名</p>
+            <p>{{ auth()->user()->name }}</p>
+        </div>
+    </div>
 <table>
     <thead>
         <tr>
@@ -26,3 +43,7 @@
         @endforeach
     </tbody>
 </table>
+</section>
+@include('layouts.footer')
+</body>
+</html>
