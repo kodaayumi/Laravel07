@@ -23,6 +23,27 @@ class Task extends Model
         return $tasks;
     }
 
+    //タスクの担当者を取得する
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    //タスクの状態を文字列に変換する
+    public function getStatusLabel()
+    {
+        $statuses = [
+        1 => '未処理',
+        2 => '進行中',
+        3 => '保留',
+        4 => '完了',
+        ];
+
+    return $statuses[$this->task_status] ?? '不明';
+    }
+
+
+
     //新規登録したタスクの内容をDBに保存する
     public function storeTask($request){
         $userName = $request->input('user_name');

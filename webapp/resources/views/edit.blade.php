@@ -13,12 +13,12 @@
     @csrf
     
     <div class="pb-4">
-        <label for="title"><p class="text-center">タイトル</p></label>
+        <label for="title"><p class="text-center">タスク名</p></label>
         <input class="rounded-lg w-full" type="text" name="title" value="{{ $task->title }}" required>
     </div>
 
     <div class="pb-4">
-        <label for="user_id"><p class="text-center">投稿者</p></label>
+        <label for="user_id"><p class="text-center">担当者</p></label>
         <select class="rounded-lg w-full" name="user_id" required>
             @foreach ($users as $user)
                 <option value="{{ $user->id }}" @if($user->id == $task->user_id) selected @endif>{{ $user->name }}</option>
