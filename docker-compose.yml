@@ -46,7 +46,8 @@ services:
       context: .
       dockerfile: ./docker/apache/Dockerfile
     ports:
-      - 80:80
+      - "80:80"
+      - "5173:5173"
     environment:
       COMPOSER_ALLOW_SUPERUSER: 1
     volumes:
