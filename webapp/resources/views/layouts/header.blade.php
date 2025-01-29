@@ -9,6 +9,11 @@
                 <li class="text-[#47883C] bg-[#E3E387] px-3 py-2 rounded rounded-full"><a href="">ユーザー情報変更</a></li>
             </ul>
         </nav>
-        <h2 class="text-[#E3E387] bg-[#47883C] px-3 py-2 rounded rounded-full"><a href="{{ route('logout') }}">ログアウト</a></h2>
+        <form action="{{ route('logout') }}" method="POST" class="inline-block">
+            @csrf
+            <button type="submit" class="text-[#E3E387] bg-[#47883C] px-3 py-2 rounded rounded-full">
+                ログアウト
+            </button>
+        </form>
     </div>
 </div>
