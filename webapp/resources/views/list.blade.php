@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 
-<body>
+<body class="flex h-screen flex-col">
 @include('layouts.header')
-    <section class="max-w-5xl mx-auto">
+    <section class="flex-1 max-w-5xl w-full mx-auto">
     <div class="mb-8 flex items-center">
         <img class="w-1/6 rounded-full" src="{{ asset('images/default.jpg') }}" alt="ユーザー画像">
         <div class="text-center">
@@ -39,7 +32,7 @@
                     </button>
                 </td>
                 <td>
-                    <form class="inline-block bg-[#B22222] text-white rounded-lg px-3" action="{{ route('delete', ['id' => $task->id]) }}" method="post">
+                    <form class="my-auto inline-block bg-[#B22222] text-white rounded-lg px-3" action="{{ route('delete', ['id' => $task->id]) }}" method="post">
                         @csrf
                         @method('delete')
                         <button type="submit">削除</button>
