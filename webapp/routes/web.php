@@ -22,7 +22,7 @@ Route::get('/index', [App\Http\Controllers\TaskController::class, 'index'])->nam
 Route::get('/create', [App\Http\Controllers\TaskController::class, 'showCreate'])->name('show.create');
 Route::post('/create', [App\Http\Controllers\TaskController::class, 'storeTask'])->name('store.task');
 Route::get('/edit/{id}', [App\Http\Controllers\TaskController::class, 'showEdit'])->name('show.edit');
-Route::post('/edit/{id}', [App\Http\Controllers\TaskController::class, 'registEdit'])->name('update.task');
+Route::post('/edit/{id}', [App\Http\Controllers\TaskController::class, 'registEdit'])->name('regist.edit');
 Route::delete('/delete/{id}', [App\Http\Controllers\TaskController::class, 'deleteTask'])->name('delete');
 
 

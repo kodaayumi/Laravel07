@@ -69,12 +69,12 @@ class TaskController extends Controller
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'comment' => 'nullable|string',
-                'user_name' => 'required|exists:users,name', // ユーザー名の存在確認
+                'user_id' => 'required|exists:users,id', // ユーザー名の存在確認
                 'task_status' => 'required|integer', // タスクステータスが整数であること
             ]);
             $task->update([
                 'title' => $validated['title'],
-                'user_id' => User::where('name', $validated['user_name'])->first()->id,
+                'user_id' => $validated['user_id'],
                 'task_status' => $validated['task_status'],
                 'comment' => $validated['comment'],
             ]);
