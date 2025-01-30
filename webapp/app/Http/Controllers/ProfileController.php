@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,21 +33,26 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $user->fill($request->validated());
-
+    
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
-
-        if(request()->hasFile('profile_img')) {
-            if ($user->profile_img && $user->profile_img != 'default.jpg')
-            Storage::disk('public')->delete($user->profile_img);
+    
+        if ($request->hasFile('profile_img')) {
+            if ($user->profile_img && $user->profile_img != 'default.jpg') {
+                Storage::disk('public')->delete($user->profile_img);
+            }
+    
+            try {
+                $path = $request->file('profile_img')->store('profile_img', 'public');
+                $user->profile_img = $path;
+            } catch (\Exception $e) {
+                return Redirect::back()->withErrors(['profile_img' => '画像のアップロードに失敗しました。']);
+            }
         }
-
-        $path = $request->file('profile_img')->store('profile_img', 'public');
-        $user->profile_img = $path;
-
-        $request->user()->save();
-
+    
+        $user->save();
+    
         return Redirect::route('index')->with('status', 'profile-updated');
     }
 
