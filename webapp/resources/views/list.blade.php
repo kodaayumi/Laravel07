@@ -13,6 +13,29 @@
             <p>{{ auth()->user()->name }}</p>
         </div>
     </div>
+
+    <form action="{{ route('tasks.search') }}" method="GET">
+    <input class="rounded-lg mb-4 w-[300px]" type="text" name="query" placeholder="タスク名またはIDを入力" required>
+
+    <select name="user_id" class="rounded-lg mb-4">
+        <option value="">選択してください</option>
+        </select>
+    </select>
+
+    <select name="status" class="rounded-lg mb-4">
+        <option value="">ステータスを選択</option>
+        <option value="1">未処理</option>
+        <option value="2">進行中</option>
+        <option value="3">保留</option>
+        <option value="4">完了</option>
+    </select>
+
+    <button class="rounded-lg w-[100px] bg-[#47883C] px-3 py-2 text-white" type="submit">検索</button>
+    @if($tasks->isEmpty())
+    <p class="text-red-500">結果が見つかりませんでした。</p>
+    @endif
+</form>
+
 <table class="w-full">
     <thead>
         <tr class="h-10">

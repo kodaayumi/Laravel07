@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,5 +46,8 @@ Route::middleware('auth')->group(function () {
 Route::controller(ProfileController::class)->group(function(){
     Route::get('/profile/{user}/edit', 'edit')->name('profile.edit');
 });
+
+//ソート機能
+Route::get('/tasks/search', [TaskController::class, 'search'])->name('tasks.search');
 
 require __DIR__.'/auth.php';

@@ -1,12 +1,13 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use App\Models\User;
 use DB;
 use Log;
-use App\Http\Requests\TaskRequest;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -110,6 +111,41 @@ class TaskController extends Controller
             return redirect()->route('index')->with('error', 'タスクの削除に失敗しました。');
         }
         return redirect()->route('index');
+    }
+
+    // タスク検索
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $user_id = $request->input('user_id');
+        $status = $request->input('status');
+    
+        $tasks = Task::query();
+    
+        // タスク名またはIDで検索
+        if ($query) {
+            $tasks->where(function ($q) use ($query) {
+                $q->where('title', 'LIKE', "%{$query}%"); // タスク名で検索
+                if (is_numeric($query)) {
+                    $q->orWhere('id', $query); // 数字ならID検索
+                }
+            });
+        }
+    
+        if ($user_id && $user_id !== 'all') {
+            $tasks->where('user_id', $user_id);
+        }
+    
+        if ($status) {
+            $tasks->where('status', $status);
+        }
+    
+        $tasks = $tasks->get();
+    
+        // ユーザーリストを取得
+        $users = User::all(); // Userモデルを使用してすべてのユーザーを取得
+    
+        return view('list', compact('tasks', 'users')); // $usersをビューに渡す
     }
 }
 ?>
