@@ -15,20 +15,25 @@
     </div>
 
     <form action="{{ route('tasks.search') }}" method="GET">
-    <input class="rounded-lg mb-4 w-[300px]" type="text" name="query" placeholder="タスク名またはIDを入力" required>
+    <input class="rounded-lg mb-4 w-[300px]" type="text" name="query" placeholder="タスク名またはIDを入力">
 
     <select name="user_id" class="rounded-lg mb-4">
-        <option value="">選択してください</option>
-        </select>
+    <option value="all">担当者を選択</option>
+    @foreach ($users as $user)
+        <option value="{{ $user->id }}">{{ $user->name }}</option>
+    @endforeach
     </select>
 
     <select name="status" class="rounded-lg mb-4">
-        <option value="">ステータスを選択</option>
-        <option value="1">未処理</option>
-        <option value="2">進行中</option>
-        <option value="3">保留</option>
-        <option value="4">完了</option>
+    <option value="">ステータスを選択</option>
+    @foreach ($task_statuses as $id => $name)
+        <option value="{{ $id }}" {{ request('status') == $id ? 'selected' : '' }}>
+            {{ $name }}
+        </option>
+    @endforeach
     </select>
+
+
 
     <button class="rounded-lg w-[100px] bg-[#47883C] px-3 py-2 text-white" type="submit">検索</button>
     @if($tasks->isEmpty())

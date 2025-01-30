@@ -16,7 +16,14 @@ class TaskController extends Controller
     {
         $model = new Task();
         $tasks = $model->getTasks();
-        return view('list', ['tasks' => $tasks]);
+        $users = User::all();
+        $task_statuses = [
+            1 => '未着手',
+            2 => '進行中',
+            3 => '保留',
+            4 => '完了'
+        ];
+        return view('list', ['tasks' => $tasks, 'users' => $users, 'task_statuses' => $task_statuses]);
     }
 
     // タスク新規登録
@@ -132,20 +139,30 @@ class TaskController extends Controller
             });
         }
     
-        if ($user_id && $user_id !== 'all') {
-            $tasks->where('user_id', $user_id);
+        // 担当者でフィルタリング
+        if ($user_id === 'self') {
+            $tasks->where('user_id', Auth::id()); // ログイン中のユーザーのIDでフィルタリング
+        } elseif ($user_id && $user_id !== 'all') {
+            $tasks->where('user_id', $user_id); // 指定されたユーザーIDでフィルタリング
         }
-    
-        if ($status) {
-            $tasks->where('status', $status);
+
+        // ステータスでフィルタリング
+        if (!empty($status)) {
+            $tasks->where('task_status', $status);
         }
-    
+
         $tasks = $tasks->get();
-    
-        // ユーザーリストを取得
-        $users = User::all(); // Userモデルを使用してすべてのユーザーを取得
-    
-        return view('list', compact('tasks', 'users')); // $usersをビューに渡す
+
+        // ユーザーリストとステータスリストを取得
+        $users = User::all();
+        $task_statuses = [
+            1 => '未処理',
+            2 => '進行中',
+            3 => '保留',
+            4 => '完了'
+        ];
+
+        return view('list', compact('tasks', 'users', 'task_statuses'));
     }
-}
+    }
 ?>
