@@ -1,10 +1,13 @@
 @vite(['resources/css/app.css', 'resources/js/app.js'])
+@section('title', 'タスク一覧')
 
 <body class="flex h-screen flex-col">
 @include('layouts.header')
     <section class="flex-1 max-w-5xl w-full mx-auto">
     <div class="mb-8 flex items-center">
-        <img class="w-1/6 rounded-full" src="{{ asset('images/default.jpg') }}" alt="ユーザー画像">
+    <img class="w-1/6 rounded-full" 
+     src="{{ asset(auth()->user()->profile_img == 'default.jpg' ? 'images/default.jpg' : 'storage/' . auth()->user()->profile_img) }}" 
+     alt="ユーザー画像">
         <div class="text-center">
             <p>ユーザー名</p>
             <p>{{ auth()->user()->name }}</p>

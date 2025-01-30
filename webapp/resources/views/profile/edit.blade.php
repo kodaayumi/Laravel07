@@ -1,8 +1,11 @@
 @vite(['resources/css/app.css', 'resources/js/app.js'])
+@section('title', 'ユーザー編集')
+
 <body class="flex h-screen flex-col">
 @include('layouts.header')
 <div class="flex-1 mx-auto flex items-center justify-center">
 <form action="{{route('profile.update', $user)}}">
+<a href="{{ url()->previous() }}" class="text-center mb-8 block mx-auto w-[100px] px-2 py-1 bg-gray-500 text-white rounded-lg">戻る</a>
     @csrf
     @method('put')
         <div class="pb-4">

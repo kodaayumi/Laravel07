@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laravel07新規作成</title>
-    @include('layouts.header')
-</head>
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+@section('title', 'タスク新規作成')
 
 <body>
+@include('layouts.header')
     <div class="max-w-5xl mx-auto flex items-center justify-center">
 <form action="{{ route('store.task') }}" method="post">
+<a href="{{ url()->previous() }}" class="text-center mb-8 block mx-auto w-[100px] px-2 py-1 bg-gray-500 text-white rounded-lg">戻る</a>
     @csrf
     <div class="pb-4">
         <p class="text-center">タスク名</p>

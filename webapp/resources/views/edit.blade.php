@@ -1,17 +1,13 @@
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+@section('title', 'タスク編集')
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laravel07編集</title>
-    @include('layouts.header')
-</head>
 <body>
+
+@include('layouts.header')
     <div class="max-w-5xl mx-auto flex items-center justify-center">
 <form action="{{ route('regist.edit', ['id' => $task->id]) }}" method="POST">
     @csrf
-    
+    <a href="{{ url()->previous() }}" class="text-center mb-8 block mx-auto w-[100px] px-2 py-1 bg-gray-500 text-white rounded-lg">戻る</a>
     <div class="pb-4">
         <label for="title"><p class="text-center">タスク名</p></label>
         <input class="rounded-lg w-full" type="text" name="title" value="{{ $task->title }}" required>
