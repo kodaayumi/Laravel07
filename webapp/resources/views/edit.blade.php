@@ -11,6 +11,9 @@
     <div class="pb-4">
         <label for="title"><p class="text-center">タスク名</p></label>
         <input class="rounded-lg w-full" type="text" name="title" value="{{ $task->title }}" required>
+        @error('title') 
+            <div class="text-red-500 text-sm">{{ $message }}</div>
+        @enderror
     </div>
 
     <div class="pb-4">

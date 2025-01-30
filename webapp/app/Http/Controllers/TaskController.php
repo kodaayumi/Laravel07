@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\User;
 use DB;
 use Log;
+use App\Http\Requests\TaskRequest;
 
 class TaskController extends Controller
 {
@@ -25,23 +26,30 @@ class TaskController extends Controller
     }
 
     // タスク登録
-    public function storeTask(Request $request)
+    public function storeTask(TaskRequest $request)
     {
-        $userId = $request->input('user_id');
-        Log::debug('Received user_id: ' . $userId);
+        try {
+            DB::beginTransaction();
     
-        $user = User::find($userId);
-        if (!$user) {
-            throw new \Exception("ユーザーが存在しません");
+            $user = User::find($request->input('user_id'));
+            if (!$user) {
+                throw new \Exception("ユーザーが存在しません");
+            }
+    
+            Task::create([
+                'title' => $request->input('title'),
+                'user_id' => $user->id,
+                'task_status' => $request->input('task_status'),
+                'comment' => $request->input('comment')
+            ]);
+    
+            DB::commit();
+            return redirect()->route('index')->with('success', 'タスクが作成されました。');
+        } catch (\Exception $e) {
+            Log::error('タスク作成エラー: ' . $e->getMessage());
+            DB::rollBack();
+            return redirect()->route('index')->with('error', 'タスクの作成に失敗しました。');
         }
-    
-        Task::create([
-            'title' => $request->input('title'),
-            'user_id' => $user->id,
-            'task_status' => $request->input('task_status'),
-            'comment' => $request->input('comment')
-        ]);
-        return redirect()->route('index');
     }
 
     // タスク編集

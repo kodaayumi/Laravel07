@@ -10,6 +10,9 @@
     <div class="pb-4">
         <p class="text-center">タスク名</p>
         <input class="rounded-lg w-full" type="text" name="title">
+        @error('title') 
+            <div class="text-red-500 text-sm">{{ $message }}</div>
+        @enderror
     </div>
 
 
