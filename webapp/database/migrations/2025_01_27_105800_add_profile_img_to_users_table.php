@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('profile_img', 255)
-                  ->default('default.jpg')
-                  ->comment('プロフィール画像')
-                  ->nullable();
+            if (!Schema::hasColumn('users', 'profile_img')) {
+                $table->string('profile_img', 255)
+                    ->default('default.jpg')
+                    ->nullable()
+                    ->comment('プロフィール画像');
+            }
         });
     }
     

@@ -26,20 +26,28 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
+
+    // ユーザーのプロフィールを更新する
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
+
+        if(request()->hasFile('profile_img')) {
+            if ($user->profile_img && $user->profile_img != 'default.jpg')
+            Storage::disk('public')->delete($user->profile_img);
+        }
+
+        $path = $request->file('profile_img')->store('profile_img', 'public');
+        $user->profile_img = $path;
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('index')->with('status', 'profile-updated');
     }
 
 

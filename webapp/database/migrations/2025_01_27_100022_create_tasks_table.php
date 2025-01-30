@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title', 255);
             $table->text('comment')->nullable();
             $table->timestamps();
+            
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
