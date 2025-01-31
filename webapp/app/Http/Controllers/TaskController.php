@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    // タスク一覧
+    // タスク一覧、ソート機能
     public function index(Request $request)
     {
         $sortColum = $request->get('sort', 'id');
@@ -27,9 +27,7 @@ class TaskController extends Controller
         ->get();
 
         $newDirection = ($sortDirection == 'asc') ? 'desc' : 'asc';
-
-        // $model = new Task();
-        // $tasks = $model->getTasks();
+        
         $users = User::all();
         $task_statuses = [
             1 => '未着手',
