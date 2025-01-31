@@ -51,7 +51,7 @@
         if (file) {
             reader.readAsDataURL(file);
         } else {
-            imagePreview.src = '';
+            imagePreview.src = 'default.jpg';
             imagePreview.style.display = 'none';
         }
     }

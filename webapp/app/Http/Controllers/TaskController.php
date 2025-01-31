@@ -12,10 +12,24 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     // タスク一覧
-    public function index()
+    public function index(Request $request)
     {
-        $model = new Task();
-        $tasks = $model->getTasks();
+        $sortColum = $request->get('sort', 'id');
+        $sortDirection = $request->get('direction', 'asc');
+        $sorttableColumns = ['id', 'title', 'user_id', 'task_status'];
+
+        if (!in_array($sortColum, $sorttableColumns)) {
+            $sortColum = 'id';
+        }
+
+        $tasks = Task::with('user')
+        ->orderBy($sortColum, $sortDirection)
+        ->get();
+
+        $newDirection = ($sortDirection == 'asc') ? 'desc' : 'asc';
+
+        // $model = new Task();
+        // $tasks = $model->getTasks();
         $users = User::all();
         $task_statuses = [
             1 => '未着手',
@@ -23,7 +37,7 @@ class TaskController extends Controller
             3 => '保留',
             4 => '完了'
         ];
-        return view('list', ['tasks' => $tasks, 'users' => $users, 'task_statuses' => $task_statuses]);
+        return view('list', ['tasks' => $tasks, 'users' => $users, 'task_statuses' => $task_statuses, 'sortColumn' => $sortColum, 'sortDirection' => $sortDirection, 'newDirection' => $newDirection]);
     }
 
     // タスク新規登録
@@ -105,20 +119,21 @@ class TaskController extends Controller
     }
 
     // タスク削除
-    public function deleteTask($id)
+    public function destroy($id)
     {
-        $model = new Task();
         try {
             DB::beginTransaction();
-            $model->deleteTask($id);
+            $task = Task::findOrFail($id);
+            $task->delete();
             DB::commit();
+            
+            return redirect()->route('index')->with('success', 'タスクを削除しました。');
         } catch (\Exception $e) {
-            Log::error($e);
             DB::rollBack();
+            Log::error($e);
             return redirect()->route('index')->with('error', 'タスクの削除に失敗しました。');
         }
-        return redirect()->route('index');
-    }
+}
 
     // タスク検索
     public function search(Request $request)
@@ -164,5 +179,6 @@ class TaskController extends Controller
 
         return view('list', compact('tasks', 'users', 'task_statuses'));
     }
+
     }
 ?>

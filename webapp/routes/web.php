@@ -25,6 +25,7 @@ Route::post('/create', [App\Http\Controllers\TaskController::class, 'storeTask']
 Route::get('/edit/{id}', [App\Http\Controllers\TaskController::class, 'showEdit'])->name('show.edit');
 Route::post('/edit/{id}', [App\Http\Controllers\TaskController::class, 'registEdit'])->name('regist.edit');
 Route::delete('/delete/{id}', [App\Http\Controllers\TaskController::class, 'deleteTask'])->name('delete');
+Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
 
 

@@ -44,10 +44,26 @@
 <table class="w-full">
     <thead>
         <tr class="h-10">
-            <th>id</th>
-            <th>タスク名</th>
-            <th>担当者</th>
-            <th>ステータス</th>
+            <th>
+                <a href="{{ route('index', ['sort' => 'id', 'direction' => $newDirection]) }}">
+                    ID {!! $sortColumn === 'id' ? ($sortDirection === 'asc' ? '▲' : '▼') : '' !!}
+                </a>
+            </th>
+            <th>
+                <a href="{{ route('index', ['sort' => 'title', 'direction' => $newDirection]) }}">
+                    タスク名 {!! $sortColumn === 'title' ? ($sortDirection === 'asc' ? '▲' : '▼') : '' !!}
+                </a>
+            </th>
+            <th>
+                <a href="{{ route('index', ['sort' => 'user_id', 'direction' => $newDirection]) }}">
+                    担当者 {!! $sortColumn === 'user_id' ? ($sortDirection === 'asc' ? '▲' : '▼') : '' !!}
+                </a>
+            </th>
+            <th>
+                <a href="{{ route('index', ['sort' => 'task_status', 'direction' => $newDirection]) }}">
+                    ステータス {!! $sortColumn === 'task_status' ? ($sortDirection === 'asc' ? '▲' : '▼') : '' !!}
+                </a>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -58,16 +74,27 @@
                 <td class="text-center">{{ $task->user->name ?? '未設定' }}</td>
                 <td class="text-center">{{ $task->getStatusLabel() }}</td>
                 <td>
-                    <button class="bg-[#47883C] text-white rounded-lg px-3" onclick="location.href='{{ route('show.edit', ['id' => $task->id]) }}'">
+                    <button class="bg-[#47883C] text-white rounded-lg px-3" onclick="openModal('{{ $task->id }}')">
                         編集
                     </button>
                 </td>
                 <td>
-                    <form class="my-auto inline-block bg-[#B22222] text-white rounded-lg px-3" action="{{ route('delete', ['id' => $task->id]) }}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button type="submit">削除</button>
-                    </form>
+                        <button class="my-auto inline-block bg-[#B22222] text-white rounded-lg px-3" onclick="openModal('{{ $task->id }}')">
+                            削除
+                        </button>
+                <div id="deleteModal" class="modal" style="display:none;">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <h2 class="font-medium text-red-500">削除確認</h2>
+                        <p class="text-red-500">このタスクを削除してもよろしいですか？</p>
+                        <form id="deleteForm" method="post">
+                            @csrf
+                            @method('delete')
+                            <button id="confirmDelete" class="btn btn-danger my-auto inline-block bg-[#B22222] text-white rounded-lg px-3" type="submit">確認して削除</button>
+                            <button type="button" class="btn btn-secondary my-auto inline-block bg-[#47883C] text-white rounded-lg px-3" onclick="closeModal()">キャンセル</button>
+                        </form>
+                    </div>
+                </div>
                 </td>
             </tr>
         @endforeach
@@ -77,3 +104,23 @@
 @include('layouts.footer')
 </body>
 </html>
+
+<script>
+    let taskIdToDelete;
+
+    function openModal(taskId) {
+        taskIdToDelete = taskId; // 削除するタスクのIDを保存
+        document.getElementById('deleteModal').style.display = 'block'; // モーダルを表示
+    }
+
+    function closeModal() {
+        document.getElementById('deleteModal').style.display = 'none'; // モーダルを非表示
+    }
+
+    document.getElementById('confirmDelete').onclick = function(event) {
+        event.preventDefault();
+        // 削除フォームのアクションを設定
+        document.getElementById('deleteForm').action = `/tasks/${taskIdToDelete}`;
+        document.getElementById('deleteForm').submit();
+    };
+</script>
